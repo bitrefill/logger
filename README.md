@@ -1,7 +1,7 @@
 # Logger
 
 ### Install
-```js
+```
 npm install @bitrefill/logger
 ```
 

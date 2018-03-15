@@ -2,7 +2,7 @@ const pino = require('pino');
 const _ = require('lodash');
 
 const logger = pino({
-    prettyPrint: true,
+    prettyPrint: process.env.NODE_ENV === 'development',
     base: {
         name: process.env.APP_NAME,
     },
