@@ -1,0 +1,23 @@
+{
+  "name": "@bitrefill/logger",
+  "version": "1.0.0",
+  "description": "A logging module to unify logging across all repositories",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bitrefill/logger.git"
+  },
+  "author": "Maxim Orlov <maximorl@gmail.com> (https://github.com/Maximization)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/bitrefill/logger/issues"
+  },
+  "homepage": "https://github.com/bitrefill/logger#readme",
+  "dependencies": {
+    "lodash": "^4.17.5",
+    "pino": "^4.13.0"
+  }
+}
