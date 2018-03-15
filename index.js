@@ -3,6 +3,7 @@ const _ = require('lodash');
 
 const logger = pino({
     prettyPrint: process.env.NODE_ENV === 'development',
+    level: process.env.NODE_ENV === 'test' ? 'silent' : 'info',
     base: {
         name: process.env.APP_NAME,
     },

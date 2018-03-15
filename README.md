@@ -57,6 +57,7 @@ If equal to `development` the logs will be pretty printed for easier debugging o
 [2018-03-15T02:41:38.460Z] INFO: Regular operation
     namespace: "my-module"
 ```
+Note: `NODE_ENV=test` will silent all logs
 
 ### License
 Licensed under the MIT License, Copyright © 2018 Airfill Prepaid AB.
