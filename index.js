@@ -11,6 +11,8 @@ const logger = pino({
         error: pino.stdSerializers.err,
         err: pino.stdSerializers.err,
         e: pino.stdSerializers.err,
+        req: pino.stdSerializers.req,
+        res: pino.stdSerializers.res,
     },
 });
 
