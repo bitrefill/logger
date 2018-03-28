@@ -64,12 +64,12 @@ Note: `NODE_ENV=test` will silent all logs
 We provide a command line interface that can be used to parse Heroku live tail into an easy to read format.
 
 To use the command line tool, you can install the module globally:
-```js
+```
 npm install -g @bitrefill/logger
 ```
 
 Then pipe the Heroku live tail output:
-```js
+```
 heroku logs -t -a my-app | logger
 ```
 
