@@ -59,6 +59,25 @@ If equal to `development` the logs will be pretty printed for easier debugging o
 ```
 Note: `NODE_ENV=test` will silent all logs
 
+### CLI
+
+We provide a command line interface that can be used to parse Heroku live tail into an easy to read format.
+
+To use the command line tool, you can install the module globally:
+```js
+npm install -g @bitrefill/logger
+```
+
+Then pipe the Heroku live tail output:
+```js
+heroku logs -t -a my-app | logger
+```
+
+#### Options
+
+##### `-i, --include`
+Which JSON properties to include. Specify one or more property names, separated by commas. By default all JSON properties are included.
+
 ### License
 Licensed under the MIT License, Copyright © 2018 Airfill Prepaid AB.
 
