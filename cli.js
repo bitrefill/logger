@@ -12,14 +12,10 @@ program
     .option('-i, --include [include]', 'Comma-delimited list of properties to include. Defaults to all')
     .parse(process.argv);
 
-let props = [];
-if (program.include) {
-    props = program.include.split(',');
-}
+const props = program.include ? program.include.split(',') : [];
+const regex = /^.*?:\s({.*})$/;
 
 const transformer = through.obj((chunk, enc, cb) => {
-    const regex = /^.*?:\s({.*})$/;
-
     // Non-JSON logs
     if (!regex.test(chunk)) {
         const [, herokuSyslog, message] = chunk.match(/^(.*?]:)(\s.*)$/);
