@@ -16,14 +16,21 @@ const props = program.include ? program.include.split(',') : [];
 const regex = /^.*?:\s({.*})$/;
 
 const transformer = through.obj((chunk, enc, cb) => {
+    const [, herokuSyslog, message] = chunk.match(/^(.*?]:)(\s.*)$/);
+
     // Non-JSON logs
     if (!regex.test(chunk)) {
-        const [, herokuSyslog, message] = chunk.match(/^(.*?]:)(\s.*)$/);
         return cb(null, `${chalk.green(herokuSyslog)}${message}\n`);
     }
 
     // Parse JSON
-    const parsed = JSON.parse(chunk.match(regex)[1]);
+    let parsed;
+    try {
+        parsed = JSON.parse(chunk.match(regex)[1]);
+    } catch (e) {
+        // Not a valid JSON line, log it as is
+        return cb(null, `${chalk.green(herokuSyslog)}${message}\n`);
+    }
 
     // Cherry picked default properties
     const defaultProps = {
