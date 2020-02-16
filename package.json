@@ -1,6 +1,6 @@
 {
   "name": "@bitrefill/logger",
-  "version": "1.2.3",
+  "version": "1.3.0",
   "description": "A logging module to unify logging across all repositories",
   "main": "index.js",
   "bin": "cli.js",
