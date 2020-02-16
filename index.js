@@ -1,5 +1,22 @@
 const pino = require('pino');
 const _ = require('lodash');
+const minimatch = require('minimatch');
+
+function dolog(namespace) {
+    if (process.env.LOG) {
+        const patterns = process.env.LOG.split(',');
+
+        for (const pattern of patterns) {
+            if (minimatch(namespace, pattern)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    return true;
+}
 
 const logger = pino({
     prettyPrint: process.env.NODE_ENV === 'development',
@@ -30,8 +47,16 @@ function logWrapper(log, level, msg, ...args) {
     }
 }
 
-module.exports = (name) => {
-    const log = logger.child({ namespace: name });
+module.exports = (namespace) => {
+    if (!dolog(namespace)) {
+        return {
+            info: () => { },
+            warn: () => { },
+            error: () => { },
+        };
+    }
+
+    const log = logger.child({ namespace });
     return {
         info(msg, ...args) {
             logWrapper(log, 'info', msg, ...args);
