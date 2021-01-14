@@ -37,7 +37,7 @@ function logWrapper(log, level, msg, ...args) {
     if (!args.length) {
         log[level](msg);
     } else if (args.length > 1) {
-        log[level](msg, ...args);
+        log[level]({ ...args }, msg);
     } else if (_.isPlainObject(args[0]) || args[0] instanceof Error) {
         log[level](args[0], msg);
     } else if (_.isArray(args[0])) {
