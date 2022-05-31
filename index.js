@@ -1,6 +1,10 @@
 const pino = require('pino');
 const _ = require('lodash');
 const minimatch = require('minimatch');
+const { AsyncLocalStorage } = require('async_hooks');
+const crypto = require("crypto");
+
+const asyncLocalStorage = new AsyncLocalStorage();
 
 function dolog(namespace) {
     if (process.env.LOG) {
@@ -34,6 +38,12 @@ const logger = pino({
 });
 
 function logWrapper(log, level, msg, ...args) {
+    const { asyncId } = (asyncLocalStorage.getStore() || {});
+
+    if (asyncId) {
+        return asyncIdLogWrapper(log, level, asyncId, msg, ...args);
+    }
+
     if (!args.length) {
         log[level](msg);
     } else if (args.length > 1) {
@@ -45,6 +55,29 @@ function logWrapper(log, level, msg, ...args) {
     } else {
         log[level](msg, args[0]);
     }
+}
+
+function asyncIdLogWrapper(log, level, asyncId, msg, ...args) {
+    if (!args.length) { // No args
+        log[level]({ asyncId }, msg);
+    } else if (args.length > 1) { // multiple args
+        log[level]({ ...args, asyncId }, msg);
+    } else if (args[0] instanceof Error) {
+        log[level]({ error: args[0], asyncId }, msg);
+    } else if (_.isPlainObject(args[0])) {
+        log[level]({ ...args[0], asyncId }, msg);
+    } else if (_.isArray(args[0])) {
+        log[level]({ array: args[0], asyncId }, msg);
+    } else {
+        log[level]({ ...(args[0]), asyncId }, msg);
+    }
+}
+
+function setAsyncId(id, next) {
+    // Store a random if no ID is provided
+    const asyncId = id || crypto.randomBytes(16).toString("hex");
+
+    asyncLocalStorage.run({ asyncId }, next);
 }
 
 module.exports = (namespace) => {
@@ -67,5 +100,6 @@ module.exports = (namespace) => {
         error(msg, ...args) {
             logWrapper(log, 'error', msg, ...args);
         },
+        setAsyncId,
     };
 };
